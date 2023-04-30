@@ -21,8 +21,6 @@ const corsOptions = {
     origin: 'https://vsnreact.herokuapp.com'
   };
 
-  app.use(cors(corsOptions));
-
 // Connect to MongoDB
 connectDB();
 
