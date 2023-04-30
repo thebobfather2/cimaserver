@@ -1,6 +1,4 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -16,14 +14,6 @@ const connectDB = require('./config/dbConn');
 
 const PORT = process.env.PORT || 3500;
 
-// Allow requests from 'https://vsnreact.herokuapp.com'
-const corsConfig = corsOptions({
-    origin: 'https://vsnreact.herokuapp.com'
-});
-
-// Use cors middleware
-app.use(cors(corsConfig));
-
 // Connect to MongoDB
 connectDB();
 
@@ -33,6 +23,9 @@ app.use(logger);
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
 app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
