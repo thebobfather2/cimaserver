@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -11,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
+require('dotenv').config(); // Add this line to load environment variables
 
 const PORT = process.env.PORT || 3500;
 
