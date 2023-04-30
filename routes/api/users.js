@@ -20,7 +20,7 @@ router.get('/profile', (req, res) => {
 });
 
 // update user profile data route
-router.post('/profile', (req, res) => {
+router.put('/profile', (req, res) => {
     // get the user ID from the request object
     const userId = req.user.id;
 
