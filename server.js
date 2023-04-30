@@ -49,6 +49,10 @@ app.use('/logout', require('./routes/logout'));
 app.use(verifyJWT);
 app.use('/employees', require('./routes/api/employees'));
 app.use('/users', require('./routes/api/users'));
+app.use('/api/user/profile', verifyJWT, require('./routes/api/user/profile'));
+
+// protected route for profile
+app.use('/api/user/profile', verifyJWT, require('./routes/api/user/profile'));
 
 app.all('*', (req, res) => {
     res.status(404);
