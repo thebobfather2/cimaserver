@@ -6,9 +6,12 @@ const connectDB = async () => {
             useUnifiedTopology: true,
             useNewUrlParser: true
         });
+
+        console.log('MongoDB connected');
     } catch (err) {
         console.error(err);
+        process.exit(1); // exit the Node.js process with a non-zero exit code
     }
 }
 
-module.exports = connectDB
+module.exports = connectDB;
