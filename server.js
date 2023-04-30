@@ -1,4 +1,5 @@
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -11,7 +12,6 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
-const bcrypt = require('bcrypt');
 
 const PORT = process.env.PORT || 3500;
 
