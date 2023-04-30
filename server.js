@@ -17,12 +17,12 @@ const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT || 3500;
 
 // Allow requests from 'https://vsnreact.herokuapp.com'
-const cors = corsOptions({
+const corsConfig = corsOptions({
     origin: 'https://vsnreact.herokuapp.com'
 });
 
 // Use cors middleware
-app.use(cors);
+app.use(cors(corsConfig));
 
 // Connect to MongoDB
 connectDB();
