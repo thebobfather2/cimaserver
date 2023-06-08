@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 require('dotenv').config(); // Add this line to load environment variables
 
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
 connectDB();
@@ -26,6 +26,11 @@ app.use(credentials);
 
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
+app.use('/api', (req, res, next) => {
+    req.baseUrl = '/api';
+    next();
+  });
+
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
@@ -47,9 +52,7 @@ app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
 
 app.use(verifyJWT);
-app.use('/employees', require('./routes/api/employees'));
-app.use('/users', require('./routes/api/users'));
-app.use('/api/users/profile', verifyJWT, require('./routes/api/users'));
+app.use('/api/users', require('./routes/api/users'));
 
 app.all('*', (req, res) => {
     res.status(404);

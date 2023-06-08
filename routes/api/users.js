@@ -1,41 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 const usersController = require('../../controllers/usersController');
 const ROLES_LIST = require('../../config/roles_list');
+const PERMISSIONS_LIST = require('../../config/permissions_list');
 const verifyRoles = require('../../middleware/verifyRoles');
+const verifyJWT = require('../../middleware/verifyJWT'); // import the verifyJWT middleware
 
-// get all users and delete user routes
-router.route('/')
-    .get(verifyRoles(ROLES_LIST.Admin), usersController.getAllUsers)
-    .delete(verifyRoles(ROLES_LIST.Admin), usersController.deleteUser);
+// Only allow users with the 'User' role to access this route
+router.get('/me', verifyRoles(ROLES_LIST.User), verifyJWT, async (req, res, next) => {
+    try {
+        console.log('Fetching user data...');
+        const response = await axios.get(`http://localhost:3000/api/users/${req.user.username}`, {
+            headers: {
+                Authorization: req.headers.authorization
+            }
+        });
 
-// get single user route
-router.route('/:id')
-    .get(verifyRoles(ROLES_LIST.Admin), usersController.getUser);
+        console.log(req.user);
 
-// get user profile data route
-router.get('/profile', (req, res) => {
-    // retrieve user profile data and send as response
-    res.send({ name: 'John Smith', profilePicture: 'https://example.com/profile-picture.jpg', bio: 'I like hiking and reading.' });
+        console.log('User data successfully fetched!');
+        res.json(response.data);
+    } catch (error) {
+        next(error);
+    }
 });
 
-// update user profile data route
-router.post('/profile', (req, res) => {
-    // get the user ID from the request object
-    const userId = req.user.id;
-
-    // get the updated profile data from the request body
-    const updatedProfileData = req.body;
-
-    // update the user's profile data in the database
-    usersController.updateUserProfile(userId, updatedProfileData)
-        .then(() => {
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.sendStatus(500);
+router.get('/me/id', verifyRoles(ROLES_LIST.User), verifyJWT, async (req, res, next) => {
+    try {
+        console.log('Fetching user ID...');
+        const response = await axios.get(`http://localhost:3000/api/users/${req.user.username}`, {
+            headers: {
+                Authorization: req.headers.authorization
+            }
         });
+
+        console.log(req.user);
+
+        console.log('User ID successfully fetched!');
+        res.json(response.data.id); // return the user ID
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;

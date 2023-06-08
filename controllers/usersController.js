@@ -17,33 +17,21 @@ const deleteUser = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-  if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
-  const user = await User.findOne({ _id: req.params.id }).exec();
-  if (!user) {
-    return res.status(204).json({ 'message': `User ID ${req.params.id} not found` });
-  }
-  res.json(user);
-}
-
-const updateUser = async (req, res) => {
-  const { name, profilePicture, bio } = req.body;
-  if (!name || !profilePicture || !bio) return res.status(400).json({ 'message': 'Name, profile picture, and bio are required fields.' });
+  if (!req?.params?.username) return res.status(400).json({ "message": 'Username required' });
   try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.user.id },
-      { name, profilePicture, bio },
-      { new: true }
-    );
-    res.json(updatedUser);
+    const user = await User.findOne({ username: req.params.username }).select('username').exec();
+    if (!user) {
+      return res.status(204).json({ 'message': `User ${req.params.username} not found` });
+    }
+    res.json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ 'message': 'Server error' });
   }
-};
+}
 
 module.exports = {
   getAllUsers,
   deleteUser,
   getUser,
-  updateUser
 }
